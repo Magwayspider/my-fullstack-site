@@ -1,10 +1,22 @@
 // server.js ထဲမှာ ထည့်ရန်
+require('dotenv').config();
 const express = require('express');
 const db = require('./config/db');
 const app = express();
+const path = require('path');
 
 app.use(express.json());
+// ၁။ Public folder ကို Static အဖြစ် သတ်မှတ်ရန်
 app.use(express.static('public'));
+
+// ၂။ အဓိက လိပ်စာ (/) ကို နှိပ်ရင် ဘာပြမလဲ သတ်မှတ်ရန်
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'blog.html'));
+});
+
+app.listen(3000, () => {
+    console.log("Server is running on http://localhost:3000");
+});
 
 // ၁။ Post အားလုံးကို ပြန်ယူရန် (Read)
 app.get('/api/posts', (req, res) => {

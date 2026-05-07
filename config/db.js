@@ -1,29 +1,23 @@
+// config/db.js
 const mysql = require('mysql2');
 
-// Database နှင့် ချိတ်ဆက်ရန် သတ်မှတ်ချက်များ
-const dbConfig = {
+// အွန်လိုင်း Database Link (URL) ရှိမရှိ စစ်ဆေးခြင်း
+// အကယ်၍ process.env.DB_URL (Render ပေါ်က variable) ရှိရင် အဲဒါကို သုံးမယ်၊ 
+// မရှိရင် (သင့်စက်ထဲမှာဆိုရင်) localhost settings ကို သုံးမယ်။
+
+const connection = mysql.createConnection(process.env.DB_URL || {
     host: 'localhost',
-    user: 'root',      // XAMPP သုံးပါက 'root' ဖြစ်သည်
-    password: '',      // XAMPP တွင် password အလွတ်ဖြစ်သည်
-    database: 'pso_school' // phpMyAdmin တွင် သင်ဆောက်ထားသော Database အမည်
-};
-
-// Connection တည်ဆောက်ခြင်း
-const connection = mysql.createConnection(dbConfig);
-
-// ချိတ်ဆက်မှုကို စတင်ခြင်း
-connection.connect((err) => {
-    if (err) {
-        console.error('❌ Database ချိတ်ဆက်မှု အမှားဖြစ်နေသည်:', err.message);
-        // ၁၀ စက္ကန့်ကြာလျှင် ပြန်ချိတ်ရန် ကြိုးစားမည်
-        setTimeout(() => {
-            console.log("🔄 Database သို့ ပြန်လည်ချိတ်ဆက်ရန် ကြိုးစားနေသည်...");
-            connection.connect();
-        }, 10000);
-        return;
-    }
-    console.log('✅ MySQL Database နှင့် အောင်မြင်စွာ ချိတ်ဆက်ပြီးပါပြီ။');
+    user: 'root',
+    password: '',
+    database: 'pso_school'
 });
 
-// တခြားဖိုင် (server.js) ကနေ လှမ်းသုံးလို့ရအောင် Export လုပ်ခြင်း
+connection.connect((err) => {
+    if (err) {
+        console.error('❌ Database connection error:', err.message);
+        return;
+    }
+    console.log('✅ Database connected successfully!');
+});
+
 module.exports = connection;

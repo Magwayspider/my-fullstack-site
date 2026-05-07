@@ -6,8 +6,8 @@ const app = express();
 const path = require('path');
 
 app.use(express.json());
-// ၁။ Public folder ကို Static အဖြစ် သတ်မှတ်ရန်
-app.use(express.static('public'));
+// Static files တွေအတွက် (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ၂။ အဓိက လိပ်စာ (/) ကို နှိပ်ရင် ဘာပြမလဲ သတ်မှတ်ရန်
 app.get('/', (req, res) => {

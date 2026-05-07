@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Daily Blog</title>
+    <style>
+        body { font-family: 'Pyidaungsu', sans-serif; background: #f4f4f4; padding: 20px; }
+        .post-card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .post-title { color: #333; margin-top: 0; }
+        .meta { color: #888; font-size: 0.8em; }
+        .content { margin-top: 10px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <h1>ကျွန်ုပ်၏ နေ့စဉ်မှတ်တမ်းများ</h1>
+    <div id="postsContainer">
+        <!-- Post တွေ ဒီမှာ လာပေါ်မယ် -->
+    </div>
+
+    <script>
+        async function loadPosts() {
+            const response = await fetch('/api/posts');
+            const posts = await response.json();
+            const container = document.getElementById('postsContainer');
+            
+            container.innerHTML = posts.map(post => `
+                <div class="post-card">
+                    <h2 class="post-title">${post.title}</h2>
+                    <div class="meta">တင်သူ: ${post.author} | နေ့စွဲ: ${new Date(post.created_at).toLocaleDateString()}</div>
+                    <p class="content">${post.content}</p>
+                </div>
+            `).join('');
+        }
+
+        // စာမျက်နှာပွင့်တာနဲ့ Post တွေ ဆွဲထုတ်မည်
+        loadPosts();
+    </script>
+</body>
+</html>

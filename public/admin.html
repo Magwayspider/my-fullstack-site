@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Create Blog Post</title>
+    <style>
+        body { font-family: sans-serif; background: #eef2f3; display: flex; justify-content: center; padding: 40px; }
+        .admin-panel { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { color: #333; text-align: center; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        textarea { height: 150px; resize: vertical; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        button:hover { background: #0056b3; }
+        .link { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="admin-panel">
+    <h2>Post အသစ်ဖန်တီးပါ</h2>
+    <form id="postForm">
+        <input type="text" id="title" placeholder="Post ခေါင်းစဉ်" required>
+        <input type="text" id="author" placeholder="ရေးသားသူအမည်" required>
+        <textarea id="content" placeholder="အကြောင်းအရာများကို ဤနေရာတွင် ရေးသားပါ..." required></textarea>
+        <button type="submit">Post တင်မည်</button>
+    </form>
+    <a href="blog.html" class="link">Blog Page သို့ သွားရန်</a>
+</div>
+
+<script>
+    document.getElementById('postForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const postData = {
+            title: document.getElementById('title').value,
+            author: document.getElementById('author').value,
+            content: document.getElementById('content').value
+        };
+
+        try {
+            const response = await fetch('/api/posts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(postData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("Post တင်ခြင်း အောင်မြင်ပါသည်!");
+                document.getElementById('postForm').reset(); // Form ကို အလွတ်ပြန်လုပ်ပေးခြင်း
+            } else {
+                alert("Error: " + result.error);
+            }
+        } catch (error) {
+            console.error("Error sending post:", error);
+            alert("ဆာဗာနှင့် ချိတ်ဆက်၍မရပါ");
+        }
+    });
+</script>
+
+</body>
+</html>
